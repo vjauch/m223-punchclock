@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import javax.persistence.*;
+import javax.validation.constraints.AssertTrue;
 import java.time.LocalDateTime;
 
 @Entity
@@ -47,5 +48,10 @@ public class Entry {
 
     public void setCheckOut(LocalDateTime checkOut) {
         this.checkOut = checkOut;
+    }
+
+    @AssertTrue(message = "Invalid date range. Checkin must not be after checkout!")
+    public boolean isValidDateRange () {
+        return checkOut.compareTo(checkIn) >= 0;
     }
 }
