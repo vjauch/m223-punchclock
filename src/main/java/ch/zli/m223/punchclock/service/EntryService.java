@@ -18,7 +18,7 @@ public class EntryService {
 
     public Entry createEntry(Entry entry) {
         if (entry.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Update Entry: Entry with ID {} does already exist!");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Crate Entry: Entry ID must not be set!");
         }
         return entryRepository.saveAndFlush(entry);
     }
