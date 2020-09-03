@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { EntryListComponent } from './entry-list/entry-list.component';
 import {HttpClientModule} from "@angular/common/http";
 import {MatTableModule} from "@angular/material/table";
+import {MatIconModule} from "@angular/material/icon";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import {MatTableModule} from "@angular/material/table";
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    MatTableModule
+    MatTableModule,
+    MatIconModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
