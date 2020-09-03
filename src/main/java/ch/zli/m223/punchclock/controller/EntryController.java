@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/entries")
 public class EntryController {
+
     private EntryService entryService;
 
     public EntryController(EntryService entryService) {
@@ -29,8 +30,14 @@ public class EntryController {
         return entryService.createEntry(entry);
     }
 
-    @DeleteMapping("{id}")
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
+    public Entry updateEntry(@Valid @RequestBody Entry entry) {
+        return entryService.updateEntry(entry);
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEntry(@PathVariable Long id) {
         entryService.deleteEntry(id);
     }
