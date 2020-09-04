@@ -1,5 +1,6 @@
 package ch.zli.m223.punchclock.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -29,6 +30,10 @@ public class Entry {
     @ManyToOne()
     @JoinColumn(nullable = false)
     private Category category;
+
+    @ManyToOne()
+    @JoinColumn(nullable = false)
+    private User user;
 
     public Long getId() {
         return id;
@@ -62,6 +67,15 @@ public class Entry {
         this.category = category;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @JsonIgnore
     @AssertTrue(message = "Invalid date range. Checkin must not be after checkout!")
     public boolean isValidDateRange () {
         return checkOut.compareTo(checkIn) >= 0;
