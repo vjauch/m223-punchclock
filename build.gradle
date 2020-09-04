@@ -27,6 +27,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.auth0:java-jwt:3.10.3'
+	implementation 'org.bouncycastle:bcprov-jdk15on:1.66'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
