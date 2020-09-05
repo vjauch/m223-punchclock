@@ -39,7 +39,7 @@ public class JWTTokenService {
     public String createToken(String subject) {
         return JWT.create()
                 .withSubject(subject)
-                .withExpiresAt(new Date(System.currentTimeMillis() + Long.parseLong(Objects.requireNonNull(environment.getProperty("jwt.expiration-time")))))
+                .withExpiresAt(getExpirationDate())
                 .sign(algorithm);
     }
 
@@ -50,17 +50,19 @@ public class JWTTokenService {
                 .getSubject();
     }
 
-    public Algorithm getAlgorithm() {
-        return RSA256(readPublicKey(new File(Objects.requireNonNull(environment.getProperty("jwt.public-key-file")))),
-                readPrivateKey(new File(Objects.requireNonNull(environment.getProperty("jwt.private-key-file")))));
+    private Algorithm getAlgorithm() {
+        return RSA256(readPublicKey(new File(Objects.requireNonNull(environment.getProperty("jwt.public-key-file"),
+                "Public key file property not set"))),
+                readPrivateKey(new File(Objects.requireNonNull(environment.getProperty("jwt.private-key-file"),
+                        "Private key file property not set"))));
     }
 
-    public RSAPublicKey readPublicKey(File file) {
+    private RSAPublicKey readPublicKey(File file) {
         KeyFactory factory;
         try {
             factory = KeyFactory.getInstance(ALGORITHM_RSA);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("No such algorithm exception: ", e);
+            throw new RuntimeException("No such algorithm: ", e);
         }
 
         try (FileReader keyReader = new FileReader(file);
@@ -70,16 +72,16 @@ public class JWTTokenService {
             X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(content);
             return (RSAPublicKey) factory.generatePublic(pubKeySpec);
         } catch (IOException | InvalidKeySpecException e) {
-            throw new RuntimeException("Exception while reading key file: ", e);
+            throw new RuntimeException("Exception while reading public key file: ", e);
         }
     }
 
-    public RSAPrivateKey readPrivateKey(File file) {
+    private RSAPrivateKey readPrivateKey(File file) {
         KeyFactory factory;
     	try {
             factory = KeyFactory.getInstance(ALGORITHM_RSA);
         } catch (NoSuchAlgorithmException e) {
-    	    throw new RuntimeException("No such algorithm exception: ", e);
+    	    throw new RuntimeException("No such algorithm: ", e);
         }
         try (FileReader keyReader = new FileReader(file);
                 PemReader pemReader = new PemReader(keyReader)) {
@@ -89,8 +91,13 @@ public class JWTTokenService {
             PKCS8EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(content);
             return (RSAPrivateKey) factory.generatePrivate(privKeySpec);
         } catch (IOException | InvalidKeySpecException e) {
-            // TODO: adapt exceptions
-            throw new RuntimeException("Exception while reading key file: ", e);
+            throw new RuntimeException("Exception while reading private key file: ", e);
         }
+    }
+
+    private Date getExpirationDate() {
+        return new Date(System.currentTimeMillis() + Long.parseLong(
+                Objects.requireNonNull(environment.getProperty("jwt.expiration-time"),
+                        "JWT expiration time property not set")));
     }
 }
