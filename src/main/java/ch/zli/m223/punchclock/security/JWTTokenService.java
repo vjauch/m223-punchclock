@@ -1,10 +1,14 @@
 package ch.zli.m223.punchclock.security;
 
+import static ch.zli.m223.punchclock.security.SecurityConstants.ALGORITHM_RSA;
+import static ch.zli.m223.punchclock.security.SecurityConstants.TOKEN_PREFIX;
+import static com.auth0.jwt.algorithms.Algorithm.RSA256;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -18,26 +22,24 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Date;
-
-import static ch.zli.m223.punchclock.security.SecurityConstants.*;
-import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
-import static com.auth0.jwt.algorithms.Algorithm.RSA256;
+import java.util.Objects;
 
 @Service
 public class JWTTokenService {
 
-	@Value("${jwt.expiration-time}")
-    private long expirationTime;
+
+	private final Environment environment;
     private final Algorithm algorithm;
 
-    public JWTTokenService() {
+    public JWTTokenService(Environment environment) {
+        this.environment = environment;
         this.algorithm = getAlgorithm();
     }
 
     public String createToken(String subject) {
         return JWT.create()
                 .withSubject(subject)
-                .withExpiresAt(new Date(System.currentTimeMillis() + expirationTime))
+                .withExpiresAt(new Date(System.currentTimeMillis() + Long.parseLong(Objects.requireNonNull(environment.getProperty("jwt.expiration-time")))))
                 .sign(algorithm);
     }
 
@@ -49,9 +51,8 @@ public class JWTTokenService {
     }
 
     public Algorithm getAlgorithm() {
-        // TODO: filepath from properties
-        return RSA256(readPublicKey(new File("...../key.pem.pub")),
-                readPrivateKey(new File("....../key.pem")));
+        return RSA256(readPublicKey(new File(Objects.requireNonNull(environment.getProperty("jwt.public-key-file")))),
+                readPrivateKey(new File(Objects.requireNonNull(environment.getProperty("jwt.private-key-file")))));
     }
 
     public RSAPublicKey readPublicKey(File file) {
