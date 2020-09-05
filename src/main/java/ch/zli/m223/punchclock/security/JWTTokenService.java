@@ -57,14 +57,13 @@ public class JWTTokenService {
     public RSAPublicKey readPublicKey(File file) {
         KeyFactory factory;
         try {
-            factory = KeyFactory.getInstance("RSA");
+            factory = KeyFactory.getInstance(ALGORITHM_RSA);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("No such algorithm exception: ", e);
         }
 
         try (FileReader keyReader = new FileReader(file);
                 PemReader pemReader = new PemReader(keyReader)) {
-
             PemObject pemObject = pemReader.readPemObject();
             byte[] content = pemObject.getContent();
             X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(content);
@@ -77,12 +76,10 @@ public class JWTTokenService {
     public RSAPrivateKey readPrivateKey(File file) {
         KeyFactory factory;
     	try {
-    	    // TODO: move RSA to constants
-            factory = KeyFactory.getInstance("RSA");
+            factory = KeyFactory.getInstance(ALGORITHM_RSA);
         } catch (NoSuchAlgorithmException e) {
     	    throw new RuntimeException("No such algorithm exception: ", e);
         }
-
         try (FileReader keyReader = new FileReader(file);
                 PemReader pemReader = new PemReader(keyReader)) {
 
