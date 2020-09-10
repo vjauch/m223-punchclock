@@ -10,8 +10,10 @@ import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.security.KeyFactory;
@@ -51,10 +53,14 @@ public class JWTTokenService {
     }
 
     private Algorithm getAlgorithm() {
-        return RSA256(readPublicKey(new File(Objects.requireNonNull(environment.getProperty("jwt.public-key-file"),
-                "Public key file property not set"))),
-                readPrivateKey(new File(Objects.requireNonNull(environment.getProperty("jwt.private-key-file"),
-                        "Private key file property not set"))));
+        try {
+            return RSA256(readPublicKey(ResourceUtils.getFile("classpath:" + Objects.requireNonNull(environment.getProperty("jwt.public-key-file"),
+                    "Public key file property not set"))),
+                    readPrivateKey(ResourceUtils.getFile("classpath:" + Objects.requireNonNull(environment.getProperty("jwt.private-key-file"),
+                            "Private key file property not set"))));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("Get algorithm: Key file not found: ", e);
+        }
     }
 
     private RSAPublicKey readPublicKey(File file) {
