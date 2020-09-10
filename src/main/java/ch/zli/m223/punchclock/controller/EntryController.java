@@ -3,6 +3,7 @@ package ch.zli.m223.punchclock.controller;
 import ch.zli.m223.punchclock.domain.Entry;
 import ch.zli.m223.punchclock.service.EntryService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -12,7 +13,7 @@ import java.util.List;
 @RequestMapping("/entries")
 public class EntryController {
 
-    private EntryService entryService;
+    private final EntryService entryService;
 
     public EntryController(EntryService entryService) {
         this.entryService = entryService;
@@ -22,6 +23,13 @@ public class EntryController {
     @ResponseStatus(HttpStatus.OK)
     public List<Entry> getAllEntries() {
         return entryService.findAll();
+    }
+
+    @GetMapping("my")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Entry> getEntriesOfUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return entryService.findAllOfUser(username);
     }
 
     @PostMapping

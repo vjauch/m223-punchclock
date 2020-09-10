@@ -10,7 +10,8 @@ import java.util.List;
 
 @Service
 public class EntryService {
-    private EntryRepository entryRepository;
+
+    private final EntryRepository entryRepository;
 
     public EntryService(EntryRepository entryRepository) {
         this.entryRepository = entryRepository;
@@ -36,5 +37,9 @@ public class EntryService {
 
     public List<Entry> findAll() {
         return entryRepository.findAll();
+    }
+
+    public List<Entry> findAllOfUser(String username) {
+        return entryRepository.findAllEntriesOfUser(username);
     }
 }
