@@ -28,8 +28,12 @@ public class Entry {
     private LocalDateTime checkOut;
 
     @ManyToOne()
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, name = "FK_USER")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "FK_ACTIVITY")
+    private Activity activity;
 
     public Long getId() {
         return id;
@@ -61,6 +65,14 @@ public class Entry {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
 
     @JsonIgnore
