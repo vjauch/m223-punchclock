@@ -18,13 +18,16 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TokenInterceptor} from "./interceptor/TokenInterceptor";
 import { OverviewComponent } from './overview/overview.component';
+import {EntryEditorComponent} from "./entry-editor/entry-editor.component";
+import {MatNativeDateModule} from "@angular/material/core";
 
 @NgModule({
   declarations: [
     AppComponent,
     EntryListComponent,
     LoginComponent,
-    OverviewComponent
+    OverviewComponent,
+    EntryEditorComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +43,8 @@ import { OverviewComponent } from './overview/overview.component';
     MatDatepickerModule,
     MatCardModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatNativeDateModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

@@ -1,0 +1,26 @@
+<div class="wrapper">
+    <form [formGroup]=entryForm (ngSubmit)="saveEntry(entryForm.value)">
+      <mat-form-field appearance="outline">
+        <input matInput [matDatepicker]="startTimePicker">
+        <mat-label>Startzeit</mat-label>
+        <mat-datepicker-toggle matSuffix [for]="startTimePicker"></mat-datepicker-toggle>
+        <mat-datepicker #startTimePicker></mat-datepicker>
+      </mat-form-field>
+      <br/>
+      <mat-form-field appearance="outline">
+        <input matInput [matDatepicker]="endTimePicker">
+        <mat-label>Endzeit</mat-label>
+        <mat-datepicker-toggle matSuffix [for]="endTimePicker"></mat-datepicker-toggle>
+        <mat-datepicker #endTimePicker></mat-datepicker>
+      </mat-form-field>
+      <br/>
+      <mat-form-field appearance="outline">
+        <mat-label>Projekt</mat-label>
+        <mat-select [formControl]="projects">
+          <mat-option *ngFor="let project of projects" [value]="project">{{project.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br/>
+      <button mat-raised-button color="primary" type="submit">Speichern</button>
+    </form>
+</div>
