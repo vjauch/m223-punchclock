@@ -1,15 +1,18 @@
 package ch.zli.m223.punchclock.domain;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 
 @Entity
-public class Category {
+public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @Length(max = 40)
     private String name;
 
     public Long getId() {
