@@ -19,12 +19,21 @@ public class ActivityController {
         this.activityService = activityService;
     }
 
+    /**
+     * Exposes a list of activities
+     * @return all activities
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Activity> getAllActivities() {
         return activityService.findAll();
     }
 
+    /**
+     * Creates an activity
+     * @param activity the activity to be created
+     * @return the created activity
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Activity createActivity(@Valid @RequestBody Activity activity) {

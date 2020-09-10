@@ -18,12 +18,21 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
+    /**
+     * Exposes a list of projects
+     * @return all projects
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Project> getAllProjects() {
         return projectService.findAll();
     }
 
+    /**
+     * Creates a new project
+     * @param project the project to be created
+     * @return the created project
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Project createProject(@Valid @RequestBody Project project) {

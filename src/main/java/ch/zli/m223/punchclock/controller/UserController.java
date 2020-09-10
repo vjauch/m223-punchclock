@@ -17,6 +17,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * Creates a user
+     * @param user the user to be created
+     * @return the created user
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@Valid @RequestBody User user) {
