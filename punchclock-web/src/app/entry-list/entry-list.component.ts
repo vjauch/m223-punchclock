@@ -10,7 +10,7 @@ import {EntryModel} from "../domain/Entry.model";
 export class EntryListComponent implements OnInit {
 
   entries: EntryModel[];
-  displayedColumns: string[] = ['checkIn', 'checkOut', 'category', 'delete'];
+  displayedColumns: string[] = ['checkIn', 'checkOut', 'project', 'activity'];
 
   constructor(private entryService: EntryService) {
   }
